@@ -23,6 +23,9 @@
 - 已创建并提交设计文档：`docs/superpowers/specs/2026-04-27-dongman-bizhi-design.md`。
 - 本机工具链：Node.js `v22.22.0`，npm `10.9.4`，pnpm `9.9.0`，未安装 yarn。
 - Phase 1 已创建轻量 pnpm workspace、三个应用目录、环境变量示例、README 启动说明和 API 约定文档。
+- Phase 2 已建立 Express app factory、server 入口、环境变量解析、MySQL pool 参数构造、统一错误处理、Zod 请求体验证和健康检查接口。
+- `GET /health` 本地真实 HTTP 验证通过，返回 `{"success":true,"data":{"status":"ok","service":"dongman-bizhi-api"}}`。
+- 数据库初始化 SQL 位于 `apps/api/database/schema.sql`，包含 `anime_categories` 和 `wallpapers` 两张表。
 
 ## Technical Decisions
 
@@ -36,6 +39,9 @@
 | 删除分类前禁止已有壁纸的分类删除 | 避免小程序数据关系断裂。 |
 | 使用 pnpm workspace，但不创建 shared package | 兼顾根目录统一脚本和轻量单仓库方案。 |
 | API 响应格式使用 `success` envelope | 小程序和后台可以用同一判断逻辑处理成功、分页和错误。 |
+| Express app 使用 factory 而非直接监听 | 让测试可以直接使用 app 实例，server 入口保持薄。 |
+| 使用 Zod 做请求体验证 | 后续分类和壁纸接口可复用同一套验证与错误返回。 |
+| 数据库 SQL 使用外键约束 | 从数据层防止分类删除后壁纸变成孤儿数据。 |
 
 ## Issues Encountered
 
@@ -48,6 +54,8 @@
 - 设计文档：`docs/superpowers/specs/2026-04-27-dongman-bizhi-design.md`
 - 计划目录：`docs/superpowers/plans/dongman-bizhi-mvp/`
 - API 约定：`docs/api-conventions.md`
+- API README：`apps/api/README.md`
+- 数据库 SQL：`apps/api/database/schema.sql`
 
 ## Visual/Browser Findings
 

@@ -6,7 +6,7 @@
 
 ## Current Phase
 
-Phase 2
+Phase 3
 
 ## Source Spec
 
@@ -24,12 +24,12 @@ Phase 2
 
 ### Phase 2: API Server Foundation
 
-- [ ] 初始化 Express TypeScript 项目。
-- [ ] 配置 MySQL 连接、环境变量和启动脚本。
-- [ ] 创建数据库迁移或 SQL 初始化文件。
-- [ ] 实现统一错误处理、请求校验和响应封装。
-- [ ] 添加基础健康检查接口。
-- **Status:** pending
+- [x] 初始化 Express TypeScript 项目。
+- [x] 配置 MySQL 连接、环境变量和启动脚本。
+- [x] 创建数据库迁移或 SQL 初始化文件。
+- [x] 实现统一错误处理、请求校验和响应封装。
+- [x] 添加基础健康检查接口。
+- **Status:** complete
 
 ### Phase 3: Category & Wallpaper APIs
 
@@ -97,12 +97,17 @@ Phase 2
 | 第一版不做登录、搜索、上下架 | 和已确认 MVP 范围一致，优先跑通内容链路。 |
 | 使用 pnpm workspace 管理 `apps/*` | 保持单仓库轻量管理，不引入额外 shared package。 |
 | API 响应采用 `success/data/error/pagination` envelope | 前后端判断简单，分页和错误格式稳定。 |
+| API app 使用 `createApp` factory | 测试可直接挂载 Express app，server 入口只负责读取环境并监听端口。 |
+| SQL 初始化文件放在 `apps/api/database/schema.sql` | 第一版使用轻量 SQL 初始化，后续复杂时再引入迁移工具。 |
+| MySQL 外键删除策略使用 `ON DELETE RESTRICT` | 与“分类下有壁纸时禁止删除分类”的业务规则一致。 |
 
 ## Errors Encountered
 
 | Error | Attempt | Resolution |
 |-------|---------|------------|
 | 当前环境没有 `writing-plans` 技能 | 1 | 使用可用的 `planning-with-files` 技能创建持久化计划文件。 |
+| Phase 2 TDD 红灯：新增 app/config/database 测试时目标模块不存在 | 1 | 按测试补齐 `app.ts`、配置、数据库和共享中间件模块。 |
+| Phase 2 TDD 红灯：CORS 测试期望配置 origin，实际返回 `*` | 1 | 为 `createApp` 增加 `corsOrigin` 选项，并在 `server.ts` 传入环境配置。 |
 
 ## Notes
 

@@ -33,6 +33,7 @@ pnpm install
 
 ```bash
 cp apps/api/.env.example apps/api/.env
+mysql -u root -p < apps/api/database/schema.sql
 pnpm dev:api
 ```
 
