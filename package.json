@@ -5,6 +5,7 @@
   "packageManager": "pnpm@9.9.0",
   "scripts": {
     "dev:api": "pnpm --filter @dongman-bizhi/api dev",
+    "dev:admin": "pnpm --filter @dongman-bizhi/admin dev",
     "test": "pnpm --recursive test",
     "typecheck": "pnpm --recursive typecheck",
     "check": "pnpm test && pnpm typecheck"

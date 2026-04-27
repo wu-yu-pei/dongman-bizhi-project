@@ -37,6 +37,13 @@ mysql -u root -p < apps/api/database/schema.sql
 pnpm dev:api
 ```
 
+运行后台：
+
+```bash
+cp apps/admin/.env.example apps/admin/.env
+pnpm dev:admin
+```
+
 运行检查：
 
 ```bash

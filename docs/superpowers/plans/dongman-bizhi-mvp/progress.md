@@ -119,6 +119,38 @@
   - `apps/api/src/modules/uploads/oss-object-storage.test.ts`
   - `apps/api/src/modules/uploads/oss-object-storage.ts`
 
+### Phase 5: Admin App
+
+- **Status:** complete
+- Actions taken:
+  - 初始化 Vue 3 + Vite + Element Plus 后台项目配置、入口和测试环境。
+  - 写后台 API client 和 OSS 上传服务的失败测试，再实现服务层。
+  - 写后台 App 失败测试，再实现单页内容工作台。
+  - 实现分类管理、壁纸管理、分类筛选、分页、上传弹窗、OSS 直传上传、编辑和删除入口。
+  - 修复后台 Vite 版本混装导致的类型检查问题。
+  - 使用 in-app browser 打开 `http://localhost:5173/`，检查后台首屏和上传弹窗。
+  - 调整窄屏样式：筛选标签不折行、弹窗底部操作可见、API 断开提示中文化。
+  - 配置 Vite manualChunks 和 chunk warning limit，减少构建噪音。
+- Files created/modified:
+  - `package.json`
+  - `pnpm-lock.yaml`
+  - `README.md`
+  - `apps/admin/README.md`
+  - `apps/admin/package.json`
+  - `apps/admin/index.html`
+  - `apps/admin/tsconfig.json`
+  - `apps/admin/vite.config.ts`
+  - `apps/admin/vitest.config.ts`
+  - `apps/admin/src/App.vue`
+  - `apps/admin/src/App.test.ts`
+  - `apps/admin/src/env.d.ts`
+  - `apps/admin/src/main.ts`
+  - `apps/admin/src/styles.css`
+  - `apps/admin/src/services/adminApi.ts`
+  - `apps/admin/src/services/adminApi.test.ts`
+  - `apps/admin/src/services/ossUpload.ts`
+  - `apps/admin/src/services/ossUpload.test.ts`
+
 ## Test Results
 
 | Test | Input | Expected | Actual | Status |
@@ -148,6 +180,14 @@
 | Phase 4 API build | `pnpm --filter @dongman-bizhi/api build` | API TypeScript 构建通过 | 通过 | Pass |
 | Phase 4 local health | `curl -s http://localhost:3000/health` | API 本地启动后健康检查正常 | 返回 `success: true` | Pass |
 | Phase 4 local upload policy | `curl -s -X POST http://localhost:3000/admin/uploads/oss-policy ...` | 返回 host、objectKey、imageUrl、formData | 返回 V4 policy 结构 | Pass |
+| Phase 5 admin service RED | `pnpm --filter @dongman-bizhi/admin test` | service 模块缺失导致失败 | `adminApi` 和 `ossUpload` 不存在 | Pass |
+| Phase 5 admin service GREEN | `pnpm --filter @dongman-bizhi/admin test` | service 测试通过 | 5 passed | Pass |
+| Phase 5 app RED | `pnpm --filter @dongman-bizhi/admin test -- src/App.test.ts` | App 模块缺失导致失败 | `App.vue` 不存在 | Pass |
+| Phase 5 admin tests | `pnpm --filter @dongman-bizhi/admin test` | 后台测试通过 | 6 passed | Pass |
+| Phase 5 admin typecheck | `pnpm --filter @dongman-bizhi/admin typecheck` | Vue 类型检查通过 | 通过 | Pass |
+| Phase 5 admin build | `pnpm --filter @dongman-bizhi/admin build` | 后台生产构建通过 | 通过 | Pass |
+| Phase 5 full check | `pnpm check` | API + 后台测试和类型检查通过 | 35 passed，类型检查通过 | Pass |
+| Phase 5 browser smoke | in-app browser 打开 `http://localhost:5173/` | 首屏和上传弹窗可见且无布局重叠 | 通过 | Pass |
 
 ## Error Log
 
@@ -163,12 +203,14 @@
 | 2026-04-27 | `chub` CLI 不存在，无法按 get-api-docs 技能通过 chub 获取文档 | 1 | 改用阿里云官方网页文档确认 OSS V4 表单上传和 Node SDK 删除对象 |
 | 2026-04-27 | TypeScript：`ali-oss` 入口无声明文件 | 1 | 添加 `apps/api/src/types/ali-oss.d.ts` |
 | 2026-04-27 | 手动停止 Phase 4 `pnpm dev:api` 后返回 exit 130 | 1 | 验证完成后 Ctrl-C 停止 watch，不属于产品错误 |
+| 2026-04-27 | TypeScript：后台 Vite 8 与 Vitest/Vite 5 类型不兼容 | 1 | 锁定后台 `vite@^5.4.21` 和 `@vitejs/plugin-vue@^5.2.4` |
+| 2026-04-27 | Browser smoke：无 API 服务时显示 `Failed to fetch` | 1 | 对 `TypeError` 显示“无法连接 API 服务” |
 
 ## 5-Question Reboot Check
 
 | Question | Answer |
 |----------|--------|
-| Where am I? | Phase 5：Admin App 即将开始 |
+| Where am I? | Phase 6：Uniapp Miniprogram 即将开始 |
 | Where am I going? | API 基础、内容接口、OSS 上传、后台、小程序、端到端验收 |
 | What's the goal? | 完成动漫壁纸库微信小程序、后台和 Express API Server 的 MVP |
 | What have I learned? | 详见 `findings.md` |

@@ -1,0 +1,27 @@
+{
+  "name": "@dongman-bizhi/admin",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "vue-tsc --noEmit && vite build",
+    "preview": "vite preview --host 0.0.0.0",
+    "test": "vitest run",
+    "typecheck": "vue-tsc --noEmit"
+  },
+  "dependencies": {
+    "@element-plus/icons-vue": "^2.3.2",
+    "element-plus": "^2.13.7",
+    "vue": "^3.5.33"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.2.4",
+    "@vue/test-utils": "^2.4.9",
+    "jsdom": "^29.1.0",
+    "typescript": "^5.7.2",
+    "vite": "^5.4.21",
+    "vitest": "^2.1.8",
+    "vue-tsc": "^3.2.7"
+  }
+}

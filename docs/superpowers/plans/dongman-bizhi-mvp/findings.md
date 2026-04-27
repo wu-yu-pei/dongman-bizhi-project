@@ -33,6 +33,10 @@
 - 删除壁纸时会先通过 `WallpaperStorage.deleteObject(ossObjectKey)` 删除 OSS 对象，再删除数据库记录。
 - 本地用假 OSS 环境变量启动 API 后，`/admin/uploads/oss-policy` 返回了可用结构；不需要真实访问 OSS。
 - `ali-oss` 当前包没有被 TypeScript 自动识别的入口声明，项目添加了局部声明文件。
+- Phase 5 已实现 Vue 3 + Vite + Element Plus 后台单页工作台，包含分类管理、壁纸管理、OSS 直传上传入口、编辑和删除。
+- 后台 service 测试覆盖 API envelope、JSON payload、API 错误、OSS 直传表单上传；App 测试覆盖主要页面文案和数据渲染。
+- 浏览器验收：`http://localhost:5173/` 可打开后台；窄屏下主界面和上传弹窗可用，保存/取消按钮可见。
+- 后台构建已做 Vite manualChunks，主业务包约 12KB gzip 前，Element Plus 单独分包。
 
 ## Technical Decisions
 
@@ -53,6 +57,8 @@
 | MySQL repository 将 snake_case 映射为 camelCase | 前端和小程序接口保持 JavaScript 友好的字段命名。 |
 | 上传策略使用 V4 签名字段 | 与阿里云 OSS 新接入建议一致，后台前端可直接用返回的 formData 上传。 |
 | OSS SDK 删除对象包装为 `WallpaperStorage` | 内容模块不直接依赖 `ali-oss`，便于测试和以后替换存储实现。 |
+| 后台使用 Element Plus 全量注册 | 第一版开发效率优先；通过 manualChunks 将 Element Plus 独立成供应商包。 |
+| 后台弹窗在窄屏下使用受限高度和滚动 body | 避免上传表单底部按钮被挤出视口。 |
 
 ## Issues Encountered
 
@@ -74,6 +80,9 @@
 - OSS 删除 adapter：`apps/api/src/modules/uploads/oss-object-storage.ts`
 - 阿里云 OSS PostObject/V4 表单上传文档：https://www.alibabacloud.com/help/en/oss/python-1
 - 阿里云 OSS Node.js 删除对象文档：https://www.alibabacloud.com/help/en/oss/developer-reference/delete-objects-3
+- 后台入口：`apps/admin/src/App.vue`
+- 后台 API client：`apps/admin/src/services/adminApi.ts`
+- 后台 OSS 上传服务：`apps/admin/src/services/ossUpload.ts`
 
 ## Visual/Browser Findings
 

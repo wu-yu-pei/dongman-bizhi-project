@@ -1,6 +1,28 @@
 # Admin App
 
-Vue 3 + Vite + Element Plus 后台管理系统将在 Phase 5 初始化。
+Vue 3 + Vite + Element Plus 后台管理系统。
+
+## Setup
+
+```bash
+pnpm install
+cp apps/admin/.env.example apps/admin/.env
+pnpm dev:admin
+```
+
+默认访问地址：
+
+```text
+http://localhost:5173/
+```
+
+## Scripts
+
+```bash
+pnpm --filter @dongman-bizhi/admin test
+pnpm --filter @dongman-bizhi/admin typecheck
+pnpm --filter @dongman-bizhi/admin build
+```
 
 第一版后台范围：
 

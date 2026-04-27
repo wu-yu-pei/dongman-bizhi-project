@@ -6,7 +6,7 @@
 
 ## Current Phase
 
-Phase 5
+Phase 6
 
 ## Source Spec
 
@@ -51,13 +51,13 @@ Phase 5
 
 ### Phase 5: Admin App
 
-- [ ] 初始化 Vue 3 + Vite + Element Plus 后台。
-- [ ] 创建后台布局、路由和 API client。
-- [ ] 实现动漫分类管理。
-- [ ] 实现壁纸列表、筛选、新增、编辑、删除。
-- [ ] 实现 OSS 直传上传流程和上传失败处理。
-- [ ] 完成后台手工验收。
-- **Status:** pending
+- [x] 初始化 Vue 3 + Vite + Element Plus 后台。
+- [x] 创建后台布局、路由和 API client。
+- [x] 实现动漫分类管理。
+- [x] 实现壁纸列表、筛选、新增、编辑、删除。
+- [x] 实现 OSS 直传上传流程和上传失败处理。
+- [x] 完成后台手工验收。
+- **Status:** complete
 
 ### Phase 6: Uniapp Miniprogram
 
@@ -105,6 +105,8 @@ Phase 5
 | OSS 直传使用 V4 POST policy | 阿里云官方文档推荐新接入使用 V4 签名，后台只返回前端组表单所需字段。 |
 | OSS objectKey 使用 `uploadDir/YYYY/MM/DD/randomId.ext` | 路径可按日期归档，避免原始文件名冲突。 |
 | OSS 删除客户端采用懒加载 | 本地没配置 OSS 时仍可启动 API；只有删除对象时才需要完整 OSS 配置。 |
+| 后台采用单页内容工作台 | 第一版范围聚焦分类和壁纸管理，不引入复杂路由或权限壳。 |
+| 后台视觉采用安静的内容运营风格 | 管理系统需要高信息密度和稳定扫描，而不是营销页式视觉。 |
 
 ## Errors Encountered
 
@@ -118,6 +120,8 @@ Phase 5
 | Phase 3 类型检查：Express params 类型和 mysql2 executor 类型不匹配 | 1 | 放宽参数读取为 `unknown`，并为 MySQL pool 增加 executor 适配器。 |
 | Phase 4 TDD 红灯：上传模块不存在、删除壁纸未调用 OSS storage | 1 | 补齐 OSS policy service、upload router 和 wallpaperStorage 依赖。 |
 | Phase 4 类型检查：`ali-oss` 无声明文件 | 1 | 增加本地 `ali-oss` 声明文件，并为 OSS client 做懒加载适配。 |
+| Phase 5 TDD 红灯：后台 service 和 App 模块不存在 | 1 | 补齐 admin API client、OSS 上传服务和 Vue 后台页面。 |
+| Phase 5 类型检查：Vite 8 与 Vitest/Vite 5 类型混装 | 1 | 将后台 `vite` 和 `@vitejs/plugin-vue` 锁到 Vite 5 兼容版本。 |
 
 ## Notes
 
