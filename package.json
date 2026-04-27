@@ -1,0 +1,12 @@
+{
+  "name": "dongman-bizhi-project",
+  "version": "0.1.0",
+  "private": true,
+  "packageManager": "pnpm@9.9.0",
+  "scripts": {
+    "dev:api": "pnpm --filter @dongman-bizhi/api dev",
+    "test": "pnpm --recursive test",
+    "typecheck": "pnpm --recursive typecheck",
+    "check": "pnpm test && pnpm typecheck"
+  }
+}

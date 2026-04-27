@@ -6,7 +6,7 @@
 
 ## Current Phase
 
-Phase 1
+Phase 2
 
 ## Source Spec
 
@@ -16,11 +16,11 @@ Phase 1
 
 ### Phase 1: Project Scaffold & Shared Conventions
 
-- [ ] 创建 `apps/miniprogram`、`apps/admin`、`apps/api` 目录。
-- [ ] 确定根目录脚本、环境变量示例和 README 启动说明。
-- [ ] 为 API、后台和小程序统一基础配置命名。
-- [ ] 建立 API 返回格式、分页格式和错误格式约定。
-- **Status:** in_progress
+- [x] 创建 `apps/miniprogram`、`apps/admin`、`apps/api` 目录。
+- [x] 确定根目录脚本、环境变量示例和 README 启动说明。
+- [x] 为 API、后台和小程序统一基础配置命名。
+- [x] 建立 API 返回格式、分页格式和错误格式约定。
+- **Status:** complete
 
 ### Phase 2: API Server Foundation
 
@@ -95,6 +95,8 @@ Phase 1
 | 图片使用阿里云 OSS + CDN | 用户已选择阿里云 OSS，适合图片存储和访问加速。 |
 | 后台前端直传 OSS | 减少 API 服务器带宽压力，适合大图上传。 |
 | 第一版不做登录、搜索、上下架 | 和已确认 MVP 范围一致，优先跑通内容链路。 |
+| 使用 pnpm workspace 管理 `apps/*` | 保持单仓库轻量管理，不引入额外 shared package。 |
+| API 响应采用 `success/data/error/pagination` envelope | 前后端判断简单，分页和错误格式稳定。 |
 
 ## Errors Encountered
 

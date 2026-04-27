@@ -21,6 +21,8 @@
 
 - 当前仓库是新项目，初始状态只有 `README.md` 和一次初始提交。
 - 已创建并提交设计文档：`docs/superpowers/specs/2026-04-27-dongman-bizhi-design.md`。
+- 本机工具链：Node.js `v22.22.0`，npm `10.9.4`，pnpm `9.9.0`，未安装 yarn。
+- Phase 1 已创建轻量 pnpm workspace、三个应用目录、环境变量示例、README 启动说明和 API 约定文档。
 
 ## Technical Decisions
 
@@ -32,6 +34,8 @@
 | 只保存原图 URL 和 OSS objectKey | 缩略图可由 OSS 图片处理动态生成，减少存储和同步复杂度。 |
 | 删除壁纸时同步删除 OSS 文件 | 第一版避免无用图片残留，节省存储成本。 |
 | 删除分类前禁止已有壁纸的分类删除 | 避免小程序数据关系断裂。 |
+| 使用 pnpm workspace，但不创建 shared package | 兼顾根目录统一脚本和轻量单仓库方案。 |
+| API 响应格式使用 `success` envelope | 小程序和后台可以用同一判断逻辑处理成功、分页和错误。 |
 
 ## Issues Encountered
 
@@ -43,6 +47,7 @@
 
 - 设计文档：`docs/superpowers/specs/2026-04-27-dongman-bizhi-design.md`
 - 计划目录：`docs/superpowers/plans/dongman-bizhi-mvp/`
+- API 约定：`docs/api-conventions.md`
 
 ## Visual/Browser Findings
 
