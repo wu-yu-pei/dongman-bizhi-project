@@ -15,6 +15,25 @@ function createTestApp(repositories: InMemoryContentRepositories) {
   });
 }
 
+function createTestAppWithDeletedObjects(
+  repositories: InMemoryContentRepositories,
+  deletedObjects: string[],
+) {
+  return createApp({
+    registerRoutes: (router) => {
+      router.use(
+        createContentRouter(repositories, {
+          wallpaperStorage: {
+            async deleteObject(objectKey) {
+              deletedObjects.push(objectKey);
+            },
+          },
+        }),
+      );
+    },
+  });
+}
+
 describe("content routes", () => {
   let repositories: InMemoryContentRepositories;
 
@@ -187,6 +206,30 @@ describe("content routes", () => {
       .get("/admin/wallpapers")
       .expect(200);
     expect(afterDeleteResponse.body.data).toEqual([]);
+  });
+
+  it("deletes the OSS object before deleting wallpaper metadata", async () => {
+    const deletedObjects: string[] = [];
+    const app = createTestAppWithDeletedObjects(repositories, deletedObjects);
+
+    await request(app)
+      .post("/admin/categories")
+      .send({ name: "赛博朋克边缘行者" })
+      .expect(201);
+    await request(app)
+      .post("/admin/wallpapers")
+      .send({
+        categoryId: 1,
+        title: "露西壁纸",
+        imageUrl: "https://cdn.example.com/lucy.jpg",
+        ossObjectKey: "wallpapers/lucy.jpg",
+        isFeatured: true,
+      })
+      .expect(201);
+
+    await request(app).delete("/admin/wallpapers/1").expect(200);
+
+    expect(deletedObjects).toEqual(["wallpapers/lucy.jpg"]);
   });
 
   it("rejects wallpapers that reference a missing category", async () => {

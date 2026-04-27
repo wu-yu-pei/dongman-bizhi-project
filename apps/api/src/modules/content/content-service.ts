@@ -8,10 +8,18 @@ import type {
   PaginationInput,
   UpdateCategoryInput,
   UpdateWallpaperInput,
+  WallpaperStorage,
 } from "./content-types.js";
 
+const noopWallpaperStorage: WallpaperStorage = {
+  async deleteObject() {},
+};
+
 export class ContentService {
-  constructor(private readonly repositories: ContentRepositories) {}
+  constructor(
+    private readonly repositories: ContentRepositories,
+    private readonly wallpaperStorage: WallpaperStorage = noopWallpaperStorage,
+  ) {}
 
   async listCategories() {
     return this.repositories.categories.list();
@@ -96,6 +104,7 @@ export class ContentService {
       throw new AppError("WALLPAPER_NOT_FOUND", "壁纸不存在", 404);
     }
 
+    await this.wallpaperStorage.deleteObject(wallpaper.ossObjectKey);
     await this.repositories.wallpapers.delete(id);
     return { deleted: true };
   }

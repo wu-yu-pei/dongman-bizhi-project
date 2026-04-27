@@ -89,6 +89,10 @@ export type WallpaperRepository = {
   ): Promise<WallpaperWithCategory[]>;
 };
 
+export type WallpaperStorage = {
+  deleteObject(objectKey: string): Promise<void>;
+};
+
 export type ContentRepositories = {
   categories: CategoryRepository;
   wallpapers: WallpaperRepository;

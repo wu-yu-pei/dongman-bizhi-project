@@ -90,6 +90,35 @@
   - `docs/superpowers/plans/dongman-bizhi-mvp/findings.md`
   - `docs/superpowers/plans/dongman-bizhi-mvp/progress.md`
 
+### Phase 4: Aliyun OSS Direct Upload
+
+- **Status:** complete
+- Actions taken:
+  - 查询阿里云 OSS 官方文档，确认 POST 直传使用 V4 签名字段，删除对象可用 Node SDK `delete`。
+  - 为 OSS policy service 写失败测试，覆盖 V4 policy 字段、objectKey 规则、签名和不支持的文件类型。
+  - 为上传路由写失败测试，覆盖 `POST /admin/uploads/oss-policy`。
+  - 为删除壁纸写失败测试，确认删除数据库记录前调用 OSS object 删除。
+  - 实现 OSS policy service、upload router、OSS object storage adapter。
+  - 为 `ali-oss` 添加局部 TypeScript 声明，并让 OSS client 懒加载。
+  - 用假 OSS 环境变量启动 API，验证 `/health` 和 `/admin/uploads/oss-policy`。
+- Files created/modified:
+  - `apps/api/README.md`
+  - `docs/api-conventions.md`
+  - `apps/api/package.json`
+  - `pnpm-lock.yaml`
+  - `apps/api/src/server.ts`
+  - `apps/api/src/types/ali-oss.d.ts`
+  - `apps/api/src/modules/content/content-router.ts`
+  - `apps/api/src/modules/content/content-routes.test.ts`
+  - `apps/api/src/modules/content/content-service.ts`
+  - `apps/api/src/modules/content/content-types.ts`
+  - `apps/api/src/modules/uploads/oss-policy-service.test.ts`
+  - `apps/api/src/modules/uploads/oss-policy-service.ts`
+  - `apps/api/src/modules/uploads/upload-routes.test.ts`
+  - `apps/api/src/modules/uploads/upload-router.ts`
+  - `apps/api/src/modules/uploads/oss-object-storage.test.ts`
+  - `apps/api/src/modules/uploads/oss-object-storage.ts`
+
 ## Test Results
 
 | Test | Input | Expected | Actual | Status |
@@ -113,6 +142,12 @@
 | Phase 3 full check | `pnpm check` | 全仓测试和类型检查通过 | 23 passed，类型检查通过 | Pass |
 | Phase 3 API build | `pnpm --filter @dongman-bizhi/api build` | API TypeScript 构建通过 | 通过 | Pass |
 | Phase 3 health HTTP | `curl -s http://localhost:3000/health` | 内容路由注册后健康检查仍可用 | 返回 `success: true` 和 `status: ok` | Pass |
+| Phase 4 OSS RED | `pnpm --filter @dongman-bizhi/api test -- src/modules/uploads/oss-policy-service.test.ts src/modules/uploads/upload-routes.test.ts src/modules/content/content-routes.test.ts` | 上传模块缺失、删除对象未接入导致失败 | 按预期失败 | Pass |
+| Phase 4 OSS GREEN | 同上 | OSS policy、上传路由、删除对象测试通过 | 13 passed | Pass |
+| Phase 4 full check | `pnpm check` | 全仓测试和类型检查通过 | 29 passed，类型检查通过 | Pass |
+| Phase 4 API build | `pnpm --filter @dongman-bizhi/api build` | API TypeScript 构建通过 | 通过 | Pass |
+| Phase 4 local health | `curl -s http://localhost:3000/health` | API 本地启动后健康检查正常 | 返回 `success: true` | Pass |
+| Phase 4 local upload policy | `curl -s -X POST http://localhost:3000/admin/uploads/oss-policy ...` | 返回 host、objectKey、imageUrl、formData | 返回 V4 policy 结构 | Pass |
 
 ## Error Log
 
@@ -125,12 +160,15 @@
 | 2026-04-27 | TDD 红灯：`content-router` 模块不存在 | 1 | 创建内容路由、服务和内存 repository |
 | 2026-04-27 | TDD 红灯：`mysql-content-repositories` 模块不存在 | 1 | 创建 MySQL repository 和映射逻辑 |
 | 2026-04-27 | TypeScript：mysql2 `Pool.execute` 不能直接匹配自定义 executor 泛型接口 | 1 | 增加 `MysqlExecutor` 适配器并显式转换 rows 类型 |
+| 2026-04-27 | `chub` CLI 不存在，无法按 get-api-docs 技能通过 chub 获取文档 | 1 | 改用阿里云官方网页文档确认 OSS V4 表单上传和 Node SDK 删除对象 |
+| 2026-04-27 | TypeScript：`ali-oss` 入口无声明文件 | 1 | 添加 `apps/api/src/types/ali-oss.d.ts` |
+| 2026-04-27 | 手动停止 Phase 4 `pnpm dev:api` 后返回 exit 130 | 1 | 验证完成后 Ctrl-C 停止 watch，不属于产品错误 |
 
 ## 5-Question Reboot Check
 
 | Question | Answer |
 |----------|--------|
-| Where am I? | Phase 4：Aliyun OSS Direct Upload 即将开始 |
+| Where am I? | Phase 5：Admin App 即将开始 |
 | Where am I going? | API 基础、内容接口、OSS 上传、后台、小程序、端到端验收 |
 | What's the goal? | 完成动漫壁纸库微信小程序、后台和 Express API Server 的 MVP |
 | What have I learned? | 详见 `findings.md` |

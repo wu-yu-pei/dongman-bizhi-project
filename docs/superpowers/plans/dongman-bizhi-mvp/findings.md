@@ -29,6 +29,10 @@
 - Phase 3 已实现后台分类 CRUD、后台壁纸 CRUD、小程序精选列表、分类最新壁纸、分类壁纸分页和壁纸详情接口。
 - 内容模块位于 `apps/api/src/modules/content/`，由 router、service、repository 类型、MySQL repository 和测试用内存 repository 组成。
 - 当前 API 测试数：23 个，通过分类/壁纸接口行为、MySQL 行映射、Express 基础层、环境配置和响应约定。
+- Phase 4 已实现 `POST /admin/uploads/oss-policy`，返回 OSS V4 POST policy、objectKey、host、imageUrl 和 formData。
+- 删除壁纸时会先通过 `WallpaperStorage.deleteObject(ossObjectKey)` 删除 OSS 对象，再删除数据库记录。
+- 本地用假 OSS 环境变量启动 API 后，`/admin/uploads/oss-policy` 返回了可用结构；不需要真实访问 OSS。
+- `ali-oss` 当前包没有被 TypeScript 自动识别的入口声明，项目添加了局部声明文件。
 
 ## Technical Decisions
 
@@ -47,6 +51,8 @@
 | 数据库 SQL 使用外键约束 | 从数据层防止分类删除后壁纸变成孤儿数据。 |
 | 内容模块使用 service 层集中业务规则 | 分类名重复、分类不存在、分类下有壁纸禁止删除等规则集中处理。 |
 | MySQL repository 将 snake_case 映射为 camelCase | 前端和小程序接口保持 JavaScript 友好的字段命名。 |
+| 上传策略使用 V4 签名字段 | 与阿里云 OSS 新接入建议一致，后台前端可直接用返回的 formData 上传。 |
+| OSS SDK 删除对象包装为 `WallpaperStorage` | 内容模块不直接依赖 `ali-oss`，便于测试和以后替换存储实现。 |
 
 ## Issues Encountered
 
@@ -63,6 +69,11 @@
 - 数据库 SQL：`apps/api/database/schema.sql`
 - 内容接口测试：`apps/api/src/modules/content/content-routes.test.ts`
 - MySQL repository：`apps/api/src/modules/content/mysql-content-repositories.ts`
+- OSS 上传策略：`apps/api/src/modules/uploads/oss-policy-service.ts`
+- OSS 上传路由：`apps/api/src/modules/uploads/upload-router.ts`
+- OSS 删除 adapter：`apps/api/src/modules/uploads/oss-object-storage.ts`
+- 阿里云 OSS PostObject/V4 表单上传文档：https://www.alibabacloud.com/help/en/oss/python-1
+- 阿里云 OSS Node.js 删除对象文档：https://www.alibabacloud.com/help/en/oss/developer-reference/delete-objects-3
 
 ## Visual/Browser Findings
 

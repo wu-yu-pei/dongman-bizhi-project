@@ -6,7 +6,10 @@ import {
 } from "../../shared/http-response.js";
 import { validateBody } from "../../shared/validate-request.js";
 import { ContentService } from "./content-service.js";
-import type { ContentRepositories } from "./content-types.js";
+import type {
+  ContentRepositories,
+  WallpaperStorage,
+} from "./content-types.js";
 
 const categoryBodySchema = z.object({
   name: z.string().trim().min(1, "分类名称不能为空").max(100),
@@ -20,9 +23,19 @@ const wallpaperBodySchema = z.object({
   isFeatured: z.boolean().optional().default(false),
 });
 
-export function createContentRouter(repositories: ContentRepositories): Router {
+type CreateContentRouterOptions = {
+  wallpaperStorage?: WallpaperStorage;
+};
+
+export function createContentRouter(
+  repositories: ContentRepositories,
+  options: CreateContentRouterOptions = {},
+): Router {
   const router = Router();
-  const service = new ContentService(repositories);
+  const service = new ContentService(
+    repositories,
+    options.wallpaperStorage,
+  );
 
   router.get("/admin/categories", async (_req, res, next) => {
     try {

@@ -8,6 +8,9 @@ import {
   type MysqlExecutor,
   type SqlValue,
 } from "./modules/content/mysql-content-repositories.js";
+import { createOssObjectStorage } from "./modules/uploads/oss-object-storage.js";
+import { OssPolicyService } from "./modules/uploads/oss-policy-service.js";
+import { createUploadRouter } from "./modules/uploads/upload-router.js";
 
 dotenv.config();
 
@@ -23,10 +26,13 @@ const mysqlExecutor: MysqlExecutor = {
   },
 };
 const contentRepositories = createMysqlContentRepositories(mysqlExecutor);
+const ossPolicyService = new OssPolicyService({ config: config.oss });
+const wallpaperStorage = createOssObjectStorage(config.oss);
 const app = createApp({
   corsOrigin: config.api.corsOrigin,
   registerRoutes: (router) => {
-    router.use(createContentRouter(contentRepositories));
+    router.use(createContentRouter(contentRepositories, { wallpaperStorage }));
+    router.use(createUploadRouter(ossPolicyService));
   },
 });
 

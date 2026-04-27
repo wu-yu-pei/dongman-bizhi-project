@@ -6,7 +6,7 @@
 
 ## Current Phase
 
-Phase 4
+Phase 5
 
 ## Source Spec
 
@@ -42,12 +42,12 @@ Phase 4
 
 ### Phase 4: Aliyun OSS Direct Upload
 
-- [ ] 配置 OSS 环境变量。
-- [ ] 实现后台获取 OSS 直传签名接口。
-- [ ] 实现 OSS objectKey 命名规则。
-- [ ] 实现删除壁纸时同步删除 OSS 文件。
-- [ ] 添加 OSS 签名参数测试；真实 OSS 调用保留为集成配置。
-- **Status:** pending
+- [x] 配置 OSS 环境变量。
+- [x] 实现后台获取 OSS 直传签名接口。
+- [x] 实现 OSS objectKey 命名规则。
+- [x] 实现删除壁纸时同步删除 OSS 文件。
+- [x] 添加 OSS 签名参数测试；真实 OSS 调用保留为集成配置。
+- **Status:** complete
 
 ### Phase 5: Admin App
 
@@ -102,6 +102,9 @@ Phase 4
 | MySQL 外键删除策略使用 `ON DELETE RESTRICT` | 与“分类下有壁纸时禁止删除分类”的业务规则一致。 |
 | 内容接口通过 repository 接口隔离存储层 | 路由和业务规则可用内存 repository 测试，真实服务使用 MySQL repository。 |
 | 分类列表返回 `wallpaperCount`，壁纸返回 `categoryName` | 后台和小程序可直接展示，不需要前端二次拼装分类信息。 |
+| OSS 直传使用 V4 POST policy | 阿里云官方文档推荐新接入使用 V4 签名，后台只返回前端组表单所需字段。 |
+| OSS objectKey 使用 `uploadDir/YYYY/MM/DD/randomId.ext` | 路径可按日期归档，避免原始文件名冲突。 |
+| OSS 删除客户端采用懒加载 | 本地没配置 OSS 时仍可启动 API；只有删除对象时才需要完整 OSS 配置。 |
 
 ## Errors Encountered
 
@@ -113,6 +116,8 @@ Phase 4
 | Phase 3 TDD 红灯：内容路由测试引用的 `content-router` 不存在 | 1 | 补齐内容路由、服务、类型和内存 repository。 |
 | Phase 3 TDD 红灯：MySQL repository 测试引用的模块不存在 | 1 | 补齐 MySQL repository 和行映射逻辑。 |
 | Phase 3 类型检查：Express params 类型和 mysql2 executor 类型不匹配 | 1 | 放宽参数读取为 `unknown`，并为 MySQL pool 增加 executor 适配器。 |
+| Phase 4 TDD 红灯：上传模块不存在、删除壁纸未调用 OSS storage | 1 | 补齐 OSS policy service、upload router 和 wallpaperStorage 依赖。 |
+| Phase 4 类型检查：`ali-oss` 无声明文件 | 1 | 增加本地 `ali-oss` 声明文件，并为 OSS client 做懒加载适配。 |
 
 ## Notes
 
