@@ -26,6 +26,9 @@
 - Phase 2 已建立 Express app factory、server 入口、环境变量解析、MySQL pool 参数构造、统一错误处理、Zod 请求体验证和健康检查接口。
 - `GET /health` 本地真实 HTTP 验证通过，返回 `{"success":true,"data":{"status":"ok","service":"dongman-bizhi-api"}}`。
 - 数据库初始化 SQL 位于 `apps/api/database/schema.sql`，包含 `anime_categories` 和 `wallpapers` 两张表。
+- Phase 3 已实现后台分类 CRUD、后台壁纸 CRUD、小程序精选列表、分类最新壁纸、分类壁纸分页和壁纸详情接口。
+- 内容模块位于 `apps/api/src/modules/content/`，由 router、service、repository 类型、MySQL repository 和测试用内存 repository 组成。
+- 当前 API 测试数：23 个，通过分类/壁纸接口行为、MySQL 行映射、Express 基础层、环境配置和响应约定。
 
 ## Technical Decisions
 
@@ -42,6 +45,8 @@
 | Express app 使用 factory 而非直接监听 | 让测试可以直接使用 app 实例，server 入口保持薄。 |
 | 使用 Zod 做请求体验证 | 后续分类和壁纸接口可复用同一套验证与错误返回。 |
 | 数据库 SQL 使用外键约束 | 从数据层防止分类删除后壁纸变成孤儿数据。 |
+| 内容模块使用 service 层集中业务规则 | 分类名重复、分类不存在、分类下有壁纸禁止删除等规则集中处理。 |
+| MySQL repository 将 snake_case 映射为 camelCase | 前端和小程序接口保持 JavaScript 友好的字段命名。 |
 
 ## Issues Encountered
 
@@ -56,6 +61,8 @@
 - API 约定：`docs/api-conventions.md`
 - API README：`apps/api/README.md`
 - 数据库 SQL：`apps/api/database/schema.sql`
+- 内容接口测试：`apps/api/src/modules/content/content-routes.test.ts`
+- MySQL repository：`apps/api/src/modules/content/mysql-content-repositories.ts`
 
 ## Visual/Browser Findings
 

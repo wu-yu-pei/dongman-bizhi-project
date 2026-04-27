@@ -6,7 +6,7 @@
 
 ## Current Phase
 
-Phase 3
+Phase 4
 
 ## Source Spec
 
@@ -33,12 +33,12 @@ Phase 3
 
 ### Phase 3: Category & Wallpaper APIs
 
-- [ ] 实现后台分类 CRUD。
-- [ ] 实现后台壁纸 CRUD。
-- [ ] 实现删除分类前检查壁纸依赖。
-- [ ] 实现小程序公开接口：精选、分类最新、分类分页、详情。
-- [ ] 添加 API 测试，覆盖主要成功和失败路径。
-- **Status:** pending
+- [x] 实现后台分类 CRUD。
+- [x] 实现后台壁纸 CRUD。
+- [x] 实现删除分类前检查壁纸依赖。
+- [x] 实现小程序公开接口：精选、分类最新、分类分页、详情。
+- [x] 添加 API 测试，覆盖主要成功和失败路径。
+- **Status:** complete
 
 ### Phase 4: Aliyun OSS Direct Upload
 
@@ -100,6 +100,8 @@ Phase 3
 | API app 使用 `createApp` factory | 测试可直接挂载 Express app，server 入口只负责读取环境并监听端口。 |
 | SQL 初始化文件放在 `apps/api/database/schema.sql` | 第一版使用轻量 SQL 初始化，后续复杂时再引入迁移工具。 |
 | MySQL 外键删除策略使用 `ON DELETE RESTRICT` | 与“分类下有壁纸时禁止删除分类”的业务规则一致。 |
+| 内容接口通过 repository 接口隔离存储层 | 路由和业务规则可用内存 repository 测试，真实服务使用 MySQL repository。 |
+| 分类列表返回 `wallpaperCount`，壁纸返回 `categoryName` | 后台和小程序可直接展示，不需要前端二次拼装分类信息。 |
 
 ## Errors Encountered
 
@@ -108,6 +110,9 @@ Phase 3
 | 当前环境没有 `writing-plans` 技能 | 1 | 使用可用的 `planning-with-files` 技能创建持久化计划文件。 |
 | Phase 2 TDD 红灯：新增 app/config/database 测试时目标模块不存在 | 1 | 按测试补齐 `app.ts`、配置、数据库和共享中间件模块。 |
 | Phase 2 TDD 红灯：CORS 测试期望配置 origin，实际返回 `*` | 1 | 为 `createApp` 增加 `corsOrigin` 选项，并在 `server.ts` 传入环境配置。 |
+| Phase 3 TDD 红灯：内容路由测试引用的 `content-router` 不存在 | 1 | 补齐内容路由、服务、类型和内存 repository。 |
+| Phase 3 TDD 红灯：MySQL repository 测试引用的模块不存在 | 1 | 补齐 MySQL repository 和行映射逻辑。 |
+| Phase 3 类型检查：Express params 类型和 mysql2 executor 类型不匹配 | 1 | 放宽参数读取为 `unknown`，并为 MySQL pool 增加 executor 适配器。 |
 
 ## Notes
 

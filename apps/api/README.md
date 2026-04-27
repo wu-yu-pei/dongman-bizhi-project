@@ -32,3 +32,15 @@ pnpm --filter @dongman-bizhi/api build
 ## Current Routes
 
 - `GET /health`
+- `GET /admin/categories`
+- `POST /admin/categories`
+- `PUT /admin/categories/:id`
+- `DELETE /admin/categories/:id`
+- `GET /admin/wallpapers`
+- `POST /admin/wallpapers`
+- `PUT /admin/wallpapers/:id`
+- `DELETE /admin/wallpapers/:id`
+- `GET /public/featured-wallpapers`
+- `GET /public/categories-with-latest`
+- `GET /public/categories/:id/wallpapers`
+- `GET /public/wallpapers/:id`

@@ -66,6 +66,30 @@
   - `apps/api/src/shared/validate-request.ts`
   - `pnpm-lock.yaml`
 
+### Phase 3: Category & Wallpaper APIs
+
+- **Status:** complete
+- Actions taken:
+  - 为内容接口写失败测试，覆盖后台分类 CRUD、后台壁纸 CRUD、分类删除保护、小程序精选、分类最新、分类分页和壁纸详情。
+  - 实现内容模块类型、service、router 和测试用内存 repository。
+  - 为 MySQL repository 写失败测试，覆盖分类行映射、壁纸分类筛选和分页参数。
+  - 实现 MySQL repository，并在 `server.ts` 中注册真实内容接口。
+  - 更新 API README 的当前路由列表。
+  - 启动 API 并验证 `GET /health` 在内容接口注册后仍正常。
+- Files created/modified:
+  - `apps/api/README.md`
+  - `apps/api/src/server.ts`
+  - `apps/api/src/modules/content/content-routes.test.ts`
+  - `apps/api/src/modules/content/content-router.ts`
+  - `apps/api/src/modules/content/content-service.ts`
+  - `apps/api/src/modules/content/content-types.ts`
+  - `apps/api/src/modules/content/mysql-content-repositories.test.ts`
+  - `apps/api/src/modules/content/mysql-content-repositories.ts`
+  - `apps/api/src/modules/content/test-utils/in-memory-content-repositories.ts`
+  - `docs/superpowers/plans/dongman-bizhi-mvp/task_plan.md`
+  - `docs/superpowers/plans/dongman-bizhi-mvp/findings.md`
+  - `docs/superpowers/plans/dongman-bizhi-mvp/progress.md`
+
 ## Test Results
 
 | Test | Input | Expected | Actual | Status |
@@ -82,6 +106,13 @@
 | Phase 2 full check | `pnpm check` | 全仓测试和类型检查通过 | 12 passed，类型检查通过 | Pass |
 | Phase 2 API build | `pnpm --filter @dongman-bizhi/api build` | API TypeScript 构建通过 | 通过 | Pass |
 | Phase 2 health HTTP | `curl -s http://localhost:3000/health` | 返回健康检查 success envelope | 返回 `success: true` 和 `status: ok` | Pass |
+| Phase 3 content routes RED | `pnpm --filter @dongman-bizhi/api test -- src/modules/content/content-routes.test.ts` | 因内容路由未实现失败 | `content-router` 模块不存在 | Pass |
+| Phase 3 content routes GREEN | `pnpm --filter @dongman-bizhi/api test -- src/modules/content/content-routes.test.ts` | 内容接口测试通过 | 9 passed | Pass |
+| Phase 3 MySQL repo RED | `pnpm --filter @dongman-bizhi/api test -- src/modules/content/mysql-content-repositories.test.ts` | 因 MySQL repository 未实现失败 | 模块不存在 | Pass |
+| Phase 3 MySQL repo GREEN | `pnpm --filter @dongman-bizhi/api test -- src/modules/content/mysql-content-repositories.test.ts` | MySQL repository 测试通过 | 2 passed | Pass |
+| Phase 3 full check | `pnpm check` | 全仓测试和类型检查通过 | 23 passed，类型检查通过 | Pass |
+| Phase 3 API build | `pnpm --filter @dongman-bizhi/api build` | API TypeScript 构建通过 | 通过 | Pass |
+| Phase 3 health HTTP | `curl -s http://localhost:3000/health` | 内容路由注册后健康检查仍可用 | 返回 `success: true` 和 `status: ok` | Pass |
 
 ## Error Log
 
@@ -91,12 +122,15 @@
 | 2026-04-27 | TDD 红灯：app/config/database 模块不存在 | 1 | 创建 Express app、环境配置、数据库配置和共享中间件 |
 | 2026-04-27 | TDD 红灯：CORS 配置未生效 | 1 | 为 `createApp` 增加 `corsOrigin` 选项 |
 | 2026-04-27 | 手动停止 `pnpm dev:api` 后返回 exit 130 | 1 | 这是验证完成后的 Ctrl-C 停止，不属于产品错误 |
+| 2026-04-27 | TDD 红灯：`content-router` 模块不存在 | 1 | 创建内容路由、服务和内存 repository |
+| 2026-04-27 | TDD 红灯：`mysql-content-repositories` 模块不存在 | 1 | 创建 MySQL repository 和映射逻辑 |
+| 2026-04-27 | TypeScript：mysql2 `Pool.execute` 不能直接匹配自定义 executor 泛型接口 | 1 | 增加 `MysqlExecutor` 适配器并显式转换 rows 类型 |
 
 ## 5-Question Reboot Check
 
 | Question | Answer |
 |----------|--------|
-| Where am I? | Phase 3：Category & Wallpaper APIs 即将开始 |
+| Where am I? | Phase 4：Aliyun OSS Direct Upload 即将开始 |
 | Where am I going? | API 基础、内容接口、OSS 上传、后台、小程序、端到端验收 |
 | What's the goal? | 完成动漫壁纸库微信小程序、后台和 Express API Server 的 MVP |
 | What have I learned? | 详见 `findings.md` |
